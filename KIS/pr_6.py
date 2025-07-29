@@ -1,4 +1,4 @@
-from math import floor, ceil
+from math import ceil
 
 
 def main(x: set):

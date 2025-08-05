@@ -1,9 +1,0 @@
-# Документация
-
-Пример вычисления расстояния.
-
->>> from Working_script1 import distance
->>> distance(4, 4, 4, 4)
-0.0
->>> distance(1, 2, 4, 6)
-5.0

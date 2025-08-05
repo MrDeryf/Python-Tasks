@@ -7,12 +7,7 @@ class Mealy:
         self.state = "A"
 
     def reset(self):
-        states = {
-            "A": ("B", 0),
-            "D": ("G", 5),
-            "E": ("C", 7),
-            "G": ("G", 11)
-        }
+        states = {"A": ("B", 0), "D": ("G", 5), "E": ("C", 7), "G": ("G", 11)}
         if self.state in states.keys():
             new_state, out = states[self.state]
             self.state = new_state
@@ -20,11 +15,7 @@ class Mealy:
         raise MealyError("reset")
 
     def color(self):
-        states = {
-            "B": ("C", 1),
-            "D": ("H", 4),
-            "F": ("G", 8)
-        }
+        states = {"B": ("C", 1), "D": ("H", 4), "F": ("G", 8)}
         if self.state in states.keys():
             new_state, out = states[self.state]
             self.state = new_state
@@ -37,7 +28,7 @@ class Mealy:
             "D": ("E", 3),
             "E": ("F", 6),
             "F": ("A", 9),
-            "G": ("H", 10)
+            "G": ("H", 10),
         }
         if self.state in states.keys():
             new_state, out = states[self.state]

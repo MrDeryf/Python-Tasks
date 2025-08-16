@@ -12,6 +12,7 @@ def change_character(new_character):
             return dict(state, player=new_character)
         else:
             return state
+
     return func
 
 
@@ -45,6 +46,7 @@ def go_through(door_color):
                         return dict(state, carl_room="west_room")
         else:
             return state
+
     return func
 
 
@@ -63,6 +65,7 @@ def pick(key_color):
                 return state
         else:
             return state
+
     return func
 
 
@@ -78,12 +81,13 @@ def drop(key_color):
                     return dict(state, green_key=get_current_room(state))
         else:
             return state
+
     return func
 
 
 # Структура игры. Комнаты и допустимые в них действия
 game = {
-    'west_room': [
+    "west_room": [
         go_through("red"),
         go_through("green"),
         change_character("alice"),
@@ -94,9 +98,9 @@ game = {
         pick("blue"),
         drop("green"),
         drop("red"),
-        drop("blue")
+        drop("blue"),
     ],
-    'east_room': [
+    "east_room": [
         go_through("blue"),
         go_through("green"),
         change_character("alice"),
@@ -107,18 +111,18 @@ game = {
         pick("blue"),
         drop("green"),
         drop("red"),
-        drop("blue")
+        drop("blue"),
     ],
-    'red_room': [
+    "red_room": [
         change_character("alice"),
         change_character("bob"),
         change_character("carl"),
     ],
-    'blue_room': [
+    "blue_room": [
         change_character("alice"),
         change_character("bob"),
         change_character("carl"),
-    ]
+    ],
 }
 
 
@@ -161,27 +165,31 @@ class StatesGraph:
 
 # Стартовое состояние
 START_STATE = dict(
-    player='alice',
-    alice_room='west_room',
-    bob_room='east_room',
+    player="alice",
+    alice_room="west_room",
+    bob_room="east_room",
     carl_room="east_room",
-    red_key='east_room',
-    blue_key='east_room',
-    green_key='east_room',
+    red_key="east_room",
+    blue_key="east_room",
+    green_key="east_room",
 )
 
 
 def is_goal_state(state):
-    '''
+    """
     Проверить, является ли состояние целевым.
-    '''
-    return state["alice_room"] == "red_room" and state["bob_room"] == "blue_room" and (state["carl_room"] in ["red_room", "blue_room"])
+    """
+    return (
+        state["alice_room"] == "red_room"
+        and state["bob_room"] == "blue_room"
+        and (state["carl_room"] in ["red_room", "blue_room"])
+    )
 
 
 def get_current_room(state):
-    '''
+    """
     Выдать комнату, в которой находится игрок.
-    '''
+    """
     return state[f"{state['player']}_room"]
 
 
@@ -209,13 +217,15 @@ def find_dead_ends(graph: StatesGraph):
         acc_states = graph.get_accessible_states(curr_state)
         if not any((is_goal_state(state) for state in acc_states)):
             dead_ends.extend(acc_states)
-            states_to_check = [state for state in states_to_check if state not in acc_states]
+            states_to_check = [
+                state for state in states_to_check if state not in acc_states
+            ]
     return dead_ends
 
 
 def print_dot(graph: StatesGraph, start_key):
     dead_ends = find_dead_ends(graph)
-    print('digraph {')
+    print("digraph {")
     graph_keys = graph.states()
     for x in graph_keys:
         n = graph_keys.index(x)
@@ -231,8 +241,8 @@ def print_dot(graph: StatesGraph, start_key):
         n1 = graph_keys.index(x)
         for y in graph.get_connections(x):
             n2 = graph_keys.index(y)
-            print(f'n{n1} -> n{n2}')
-    print('}')
+            print(f"n{n1} -> n{n2}")
+    print("}")
 
 
 def find_shortest_solution(graph, starting_state):

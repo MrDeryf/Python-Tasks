@@ -1,6 +1,6 @@
 import operator
 
-OP_NAMES = {0: 'push', 1: 'op', 2: 'call', 3: 'is', 4: 'to', 5: 'exit'}
+OP_NAMES = {0: "push", 1: "op", 2: "call", 3: "is", 4: "to", 5: "exit"}
 possible_letters = {chr(ord("a") + i): i for i in range(26)}
 possible_letters["-"] = 26
 
@@ -55,27 +55,27 @@ def write_el(vm):
 
 
 LIB = {
-    '+': operator.add,
-    '-': operator.sub,
-    '*': operator.mul,
-    '/': operator.floordiv,  # Целочисленный вариант деления
-    '%': operator.mod,
-    '&': operator.and_,
-    '|': operator.or_,
-    '^': operator.xor,
-    '<': operator.lt,
-    '>': operator.gt,
-    '=': operator.eq,
-    '<<': operator.lshift,
-    '>>': operator.rshift,
-    'if': if_statement,
-    'for': for_statement,
-    '.': show,
-    'emit': emit,
-    '?': inp,
-    'array': create_array,
-    '@': read_el,
-    '!': write_el
+    "+": operator.add,
+    "-": operator.sub,
+    "*": operator.mul,
+    "/": operator.floordiv,  # Целочисленный вариант деления
+    "%": operator.mod,
+    "&": operator.and_,
+    "|": operator.or_,
+    "^": operator.xor,
+    "<": operator.lt,
+    ">": operator.gt,
+    "=": operator.eq,
+    "<<": operator.lshift,
+    ">>": operator.rshift,
+    "if": if_statement,
+    "for": for_statement,
+    ".": show,
+    "emit": emit,
+    "?": inp,
+    "array": create_array,
+    "@": read_el,
+    "!": write_el,
 }
 
 LIB_OPS = list(LIB.keys())
@@ -90,7 +90,7 @@ print(lib_ops_rev)
 class VirtualMachine:
     def __init__(self, code=None):
         self.stack = []
-        self.is_comp = (code is not None)
+        self.is_comp = code is not None
         if self.is_comp:
             self.pc = code[0]
             self.code = code[1:]
@@ -106,7 +106,7 @@ class VirtualMachine:
     def op_realisation(self, op_code):
         lib_op = LIB_OPS[op_code] if self.is_comp else op_code
         chosen_func = LIB[lib_op]
-        if lib_op in ['if', 'for', '.', 'emit', '?', 'array', '@', '!']:
+        if lib_op in ["if", "for", ".", "emit", "?", "array", "@", "!"]:
             chosen_func(self)
         else:
             arg2 = self.stack.pop()
@@ -126,7 +126,9 @@ class VirtualMachine:
         while name_to_find not in self.scope[func_where_looking].keys():
             if func_where_looking == "main":
                 print(self.scope, self.func_relation)
-                raise Exception(f"Нет переменной или функции с таким именем: {name_to_find}")
+                raise Exception(
+                    f"Нет переменной или функции с таким именем: {name_to_find}"
+                )
             func_where_looking = self.func_relation[func_where_looking]
         return func_where_looking
 
@@ -145,7 +147,11 @@ class VirtualMachine:
 
     def create_unique_name(self, func_name, func=True):
         i = 1
-        while (str(func_name) + str(i) in self.scope.keys()) if func else ((str(func_name) + str(i)) in self.scope[self.curr_func].keys()):
+        while (
+            (str(func_name) + str(i) in self.scope.keys())
+            if func
+            else ((str(func_name) + str(i)) in self.scope[self.curr_func].keys())
+        ):
             i += 1
         return str(func_name) + str(i)
 
@@ -153,7 +159,9 @@ class VirtualMachine:
         func_name = self.create_unique_name("nameless")
         self.scope[func_name] = dict()
 
-        self.func_stack.append((func_name, self.pc, times_used, times_to_use, func_start))
+        self.func_stack.append(
+            (func_name, self.pc, times_used, times_to_use, func_start)
+        )
         self.func_relation[func_name] = self.curr_func
         self.pc = (func_start - 1) if self.is_comp else func_start
         self.curr_func = func_name
@@ -170,9 +178,9 @@ class VirtualMachine:
                 self.call_single_use_func(times[2], times[0] + 1, times[1])
 
     def run_command(self, op, arg_code):
-        if op == 'push':
+        if op == "push":
             self.stack.append(arg_code)
-        elif op == 'op':
+        elif op == "op":
             self.op_realisation(arg_code)
         elif op == "is":
             self.is_realisation(arg_code)
@@ -304,16 +312,16 @@ def convert_code(parsed_code):
         for num in code_of_funcs[i]:
             if isinstance(num, list):
                 if num[1] is None:
-                    num[1] = pointers[num[0]] + code_of_funcs[num[0]+1][0]
+                    num[1] = pointers[num[0]] + code_of_funcs[num[0] + 1][0]
                 else:
-                    num[1] += pointers[i-1]
+                    num[1] += pointers[i - 1]
     out = []
     for i in range(1, len(code_of_funcs)):
         code_of_funcs[i].pop(0)
         out += code_of_funcs[i]
     out += code_of_funcs[0]
     out.insert(0, -1)
-    for i in range(len(out)-1, -1, -1):
+    for i in range(len(out) - 1, -1, -1):
         if out[i] == 5:
             out[0] = i
             break
@@ -392,7 +400,7 @@ ex = """[ to a a a ] is dup
 compile_result = compiler(ex)
 print(compile_result)
 print(disassemble(compile_result))
-#disassemble([17, 8, 5, 2, 2, 8, 9, 10, 17, 5, 4, 2, 16, 65, 0, 16, 105, 5, 72, 11, 40, 10, 121, 5])
+# disassemble([17, 8, 5, 2, 2, 8, 9, 10, 17, 5, 4, 2, 16, 65, 0, 16, 105, 5, 72, 11, 40, 10, 121, 5])
 vm = VirtualMachine(compile_result)
 vm.run_given_code()
 # print(parse(ex))

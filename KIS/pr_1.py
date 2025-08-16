@@ -8,6 +8,3 @@ def main(y, x):
 
 
 print(main(0.61, 0.17))
-
-
-# https://code.visualstudio.com/docs/getstarted/tips-and-tricks#_customization

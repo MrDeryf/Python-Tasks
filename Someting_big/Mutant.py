@@ -34,7 +34,7 @@ def mut_test(func, test, size=20):
             exec(mutant, globals())
             test()
             survived.append(mutant)
-        except:
+        except BaseException:
             pass
     return survived
 

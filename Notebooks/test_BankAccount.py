@@ -3,7 +3,7 @@ def distance():
     y1 = int(input())
     x2 = int(input())
     y2 = int(input())
-    return ((x2 - x1)**2 + (y2 - y1)**2) ** 0.5
+    return ((x2 - x1) ** 2 + (y2 - y1) ** 2) ** 0.5
 
 
 def test_func(monkeypatch):
@@ -12,6 +12,6 @@ def test_func(monkeypatch):
     def my_input():
         return inputs.pop()
 
-    monkeypatch.setattr('builtins.input', my_input)
+    monkeypatch.setattr("builtins.input", my_input)
     assert distance() == 5.0
     print("It works")
